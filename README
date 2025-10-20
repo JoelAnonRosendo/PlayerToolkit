@@ -5,6 +5,9 @@ python.exe -m pip install --upgrade pip
 pip install requests sv-ttk pyinstaller
 pip install tkinterdnd2-universal
 
+Carpeta Programas se descarga desde este enlace:
+https://drive.google.com/drive/folders/1gDeZkBWNOZyp2-vuN-9cVrumdCZ7zjyK?usp=sharing
+
 
 Si se quiere cambiar nombres o agregar servicios al .py
 
