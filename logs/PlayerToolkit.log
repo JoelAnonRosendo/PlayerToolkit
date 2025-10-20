@@ -1,0 +1,126 @@
+2025-10-13 13:07:16,305 - INFO - --- Iniciando PlayerToolkit v6.0.8 ---
+2025-10-13 13:07:27,605 - INFO - --- Iniciando PlayerToolkit v6.0.8 ---
+2025-10-13 13:07:47,520 - INFO - Ejecutando comando: ['msiexec', '/i', 'D:\\PlayerToolkit\\Programas\\OpenVPN\\openvpn-connect-3.8.0.4528_signed.msi', '/qn']
+2025-10-13 13:12:27,544 - INFO - --- PlayerToolkit cerrado ---
+2025-10-13 15:06:06,892 - INFO - --- Iniciando PlayerToolkit v6.0.9 ---
+2025-10-13 15:06:21,154 - INFO - --- Iniciando PlayerToolkit v6.0.9 ---
+2025-10-13 15:06:44,721 - INFO - Ejecutando comando: ['msiexec', '/x', '{622C45D6-53E7-48E3-BAB6-353525A4579E}', '/qn', '/norestart']
+2025-10-13 15:07:27,454 - INFO - Ejecutando comando: ['msiexec', '/i', 'D:\\PlayerToolkit\\Programas\\OpenVPN\\openvpn-connect-3.8.0.4528_signed.msi', '/qn']
+2025-10-13 15:54:58,300 - INFO - --- PlayerToolkit cerrado ---
+2025-10-13 15:55:34,638 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-13 15:55:46,282 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-13 15:56:14,072 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-13 15:56:24,363 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-13 17:24:43,744 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-13 17:24:56,198 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-13 17:26:41,870 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-13 17:26:52,537 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-13 17:32:43,654 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-13 17:32:53,682 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-13 17:39:15,375 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-13 17:39:25,246 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-13 17:43:46,704 - INFO - --- PlayerToolkit cerrado ---
+2025-10-13 17:46:58,849 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-13 17:47:07,856 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-13 17:47:59,259 - INFO - --- PlayerToolkit cerrado ---
+2025-10-14 10:19:24,290 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-14 10:20:47,924 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-14 10:24:44,327 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-14 10:24:44,329 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-14 10:26:42,621 - INFO - --- PlayerToolkit cerrado ---
+2025-10-14 10:50:36,861 - INFO - --- PlayerToolkit cerrado ---
+2025-10-14 10:52:47,799 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-14 10:52:59,829 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-14 10:55:47,186 - INFO - --- Iniciando tarea: OpenVPN Connect ---
+2025-10-14 10:55:47,186 - INFO - Intentando desinstalar 'OpenVPN Connect' con el comando: MsiExec.exe /X{622C45D6-53E7-48E3-BAB6-353525A4579E}
+2025-10-14 10:55:47,188 - INFO - Ejecutando comando: msiexec /x {622C45D6-53E7-48E3-BAB6-353525A4579E} /qn /norestart
+2025-10-14 10:55:57,103 - INFO - Comando finalizado con código de retorno: 0
+2025-10-14 10:55:57,103 - INFO - --- Tarea finalizada: OpenVPN Connect ---
+2025-10-14 10:56:18,576 - INFO - --- Iniciando tarea: OpenVPN ---
+2025-10-14 10:56:18,577 - INFO - Iniciando instalación local para OpenVPN desde D:\PlayerToolkit\Programas\OpenVPN\openvpn-connect-3.8.0.4528_signed.msi
+2025-10-14 10:56:18,578 - INFO - Ejecutando comando: msiexec /i D:\PlayerToolkit\Programas\OpenVPN\openvpn-connect-3.8.0.4528_signed.msi /qn
+2025-10-14 10:56:28,750 - INFO - Comando finalizado con código de retorno: 0
+2025-10-14 10:56:28,750 - INFO - --- Tarea finalizada: OpenVPN ---
+2025-10-14 10:58:07,994 - INFO - --- PlayerToolkit cerrado ---
+2025-10-14 11:03:17,394 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-14 11:03:28,285 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-14 11:04:07,174 - INFO - --- PlayerToolkit cerrado ---
+2025-10-16 13:00:41,985 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-16 13:00:45,040 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-16 13:01:39,976 - INFO - --- Iniciando tarea: AnyDesk ---
+2025-10-16 13:01:39,976 - INFO - Abriendo instalador para acción manual: D:\PlayerToolkit\Programas\AnyDesk\AnyDesk.exe
+2025-10-16 13:01:58,141 - INFO - Acción manual para AnyDesk confirmada por el usuario: Sí
+2025-10-16 13:01:58,143 - INFO - --- Tarea finalizada: AnyDesk ---
+2025-10-16 13:01:58,158 - INFO - --- Iniciando tarea: TeamViewerHost ---
+2025-10-16 13:01:58,158 - INFO - Abriendo instalador para acción manual: D:\PlayerToolkit\Programas\TeamViewerHost\TeamViewer_Host_Setup.exe
+2025-10-16 13:02:27,534 - INFO - Acción manual para TeamViewerHost confirmada por el usuario: Sí
+2025-10-16 13:02:27,534 - INFO - --- Tarea finalizada: TeamViewerHost ---
+2025-10-16 13:02:27,546 - INFO - --- Iniciando tarea: Novalct ---
+2025-10-16 13:02:27,546 - INFO - Abriendo instalador para acción manual: D:\PlayerToolkit\Programas\Novalct\NovaLCT V5.6.1.exe
+2025-10-16 13:04:09,065 - INFO - Acción manual para Novalct confirmada por el usuario: Sí
+2025-10-16 13:04:09,065 - INFO - --- Tarea finalizada: Novalct ---
+2025-10-16 13:04:09,081 - INFO - --- Iniciando tarea: Autologon ---
+2025-10-16 13:04:09,081 - INFO - Abriendo instalador para acción manual: D:\PlayerToolkit\Programas\Autologon\Autologon64.exe
+2025-10-16 13:04:52,597 - INFO - Acción manual para Autologon confirmada por el usuario: Sí
+2025-10-16 13:04:52,597 - INFO - --- Tarea finalizada: Autologon ---
+2025-10-16 13:04:52,609 - INFO - --- Iniciando tarea: PlataformaUniversal ---
+2025-10-16 13:04:52,609 - INFO - Iniciando instalación local para PlataformaUniversal desde D:\PlayerToolkit\Programas\PlataformaUniversal\LSPlayerVideo-1.0.9 Setup.exe
+2025-10-16 13:04:52,609 - INFO - Ejecutando comando: D:\PlayerToolkit\Programas\PlataformaUniversal\LSPlayerVideo-1.0.9 Setup.exe /VERYSILENT /SUPPRESSMSGBOXES
+2025-10-16 13:05:02,002 - INFO - Comando finalizado con código de retorno: 0
+2025-10-16 13:05:02,002 - INFO - Ejecutando script post-instalación para PlataformaUniversal...
+2025-10-16 13:05:02,005 - INFO - Advertencia: No se encontró el acceso directo 'LSPlayerVideo.lnk' en ningún escritorio.
+2025-10-16 13:05:02,005 - INFO - --- Tarea finalizada: PlataformaUniversal ---
+2025-10-16 13:05:02,027 - INFO - --- Iniciando tarea: Chrome ---
+2025-10-16 13:05:02,027 - INFO - Iniciando instalación local para Chrome desde D:\PlayerToolkit\Programas\Chrome\Ninite Chrome Installer.exe
+2025-10-16 13:05:02,027 - INFO - Ejecutando comando: D:\PlayerToolkit\Programas\Chrome\Ninite Chrome Installer.exe
+2025-10-16 13:06:23,549 - INFO - Comando finalizado con código de retorno: 0
+2025-10-16 13:06:23,549 - INFO - --- Tarea finalizada: Chrome ---
+2025-10-16 13:06:23,565 - INFO - --- Iniciando tarea: ConfigurarEnergiaNunca ---
+2025-10-16 13:06:23,565 - INFO - Configurando plan de energía a 'Nunca Apagar'.
+2025-10-16 13:06:23,565 - INFO - Ejecutando comando: powercfg /change monitor-timeout-ac 0
+2025-10-16 13:06:23,674 - INFO - Comando finalizado con código de retorno: 0
+2025-10-16 13:06:23,674 - INFO - Ejecutando comando: powercfg /change standby-timeout-ac 0
+2025-10-16 13:06:23,720 - INFO - Comando finalizado con código de retorno: 0
+2025-10-16 13:06:23,720 - INFO - Ejecutando comando: powercfg /change hibernate-timeout-ac 0
+2025-10-16 13:06:23,759 - INFO - Comando finalizado con código de retorno: 0
+2025-10-16 13:06:23,759 - INFO - Ejecutando comando: powercfg /change monitor-timeout-dc 0
+2025-10-16 13:06:23,807 - INFO - Comando finalizado con código de retorno: 0
+2025-10-16 13:06:23,807 - INFO - Ejecutando comando: powercfg /change standby-timeout-dc 0
+2025-10-16 13:06:23,853 - INFO - Comando finalizado con código de retorno: 0
+2025-10-16 13:06:23,853 - INFO - Ejecutando comando: powercfg /change hibernate-timeout-dc 0
+2025-10-16 13:06:23,885 - INFO - Comando finalizado con código de retorno: 0
+2025-10-16 13:06:23,885 - INFO - Plan de energía configurado con éxito.
+2025-10-16 13:06:25,401 - INFO - --- Tarea finalizada: ConfigurarEnergiaNunca ---
+2025-10-16 13:06:32,176 - INFO - --- PlayerToolkit cerrado ---
+2025-10-16 13:59:02,650 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-16 13:59:06,826 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-16 13:59:50,224 - INFO - --- Iniciando tarea: AnyDesk ---
+2025-10-16 13:59:50,224 - INFO - Abriendo instalador para acción manual: D:\PlayerToolkit\Programas\AnyDesk\AnyDesk.exe
+2025-10-16 14:00:25,790 - INFO - Acción manual para AnyDesk confirmada por el usuario: Sí
+2025-10-16 14:00:25,790 - INFO - --- Tarea finalizada: AnyDesk ---
+2025-10-16 14:00:25,797 - INFO - --- Iniciando tarea: TeamViewerHost ---
+2025-10-16 14:00:25,797 - INFO - Abriendo instalador para acción manual: D:\PlayerToolkit\Programas\TeamViewerHost\TeamViewer_Host_Setup.exe
+2025-10-16 14:00:55,361 - INFO - Acción manual para TeamViewerHost confirmada por el usuario: Sí
+2025-10-16 14:00:55,362 - INFO - --- Tarea finalizada: TeamViewerHost ---
+2025-10-16 14:00:55,373 - INFO - --- Iniciando tarea: Novalct ---
+2025-10-16 14:00:55,374 - INFO - Abriendo instalador para acción manual: D:\PlayerToolkit\Programas\Novalct\NovaLCT V5.6.1.exe
+2025-10-20 11:02:46,446 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-20 11:03:47,093 - INFO - --- Iniciando PlayerToolkit v6.1.0 ---
+2025-10-20 11:27:44,472 - INFO - --- Iniciando PlayerToolkit v6.1.1 ---
+2025-10-20 11:27:55,881 - INFO - --- Iniciando PlayerToolkit v6.1.1 ---
+2025-10-20 13:15:16,716 - INFO - --- PlayerToolkit cerrado ---
+2025-10-20 13:15:51,879 - INFO - --- Iniciando PlayerToolkit v6.1.2 ---
+2025-10-20 13:16:02,054 - INFO - --- Iniciando PlayerToolkit v6.1.2 ---
+2025-10-20 13:39:09,396 - INFO - --- PlayerToolkit cerrado ---
+2025-10-20 13:41:40,010 - INFO - --- Iniciando PlayerToolkit v6.1.3 ---
+2025-10-20 13:41:53,037 - INFO - --- Iniciando PlayerToolkit v6.1.3 ---
+2025-10-20 13:43:31,012 - INFO - --- Iniciando tarea: WizTree ---
+2025-10-20 13:43:31,013 - INFO - Iniciando instalación local para WizTree desde D:\PlayerToolkit\Programas\WizTree\wiztree_4_27_setup.exe
+2025-10-20 13:43:31,013 - INFO - Ejecutando comando: D:\PlayerToolkit\Programas\WizTree\wiztree_4_27_setup.exe /S
+2025-10-20 13:43:44,174 - INFO - Comando finalizado con código de retorno: 0
+2025-10-20 13:43:44,174 - INFO - --- Tarea finalizada: WizTree ---
+2025-10-20 13:44:28,614 - INFO - --- Iniciando tarea: WizTree v4.27 ---
+2025-10-20 13:44:28,616 - INFO - Intentando desinstalar 'WizTree v4.27' con el comando: "C:\Program Files\WizTree\unins000.exe"
+2025-10-20 13:44:28,616 - INFO - Ejecutando comando: C:\Program Files\WizTree\unins000.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART
+2025-10-20 13:44:31,979 - INFO - Comando finalizado con código de retorno: 0
+2025-10-20 13:44:31,979 - INFO - --- Tarea finalizada: WizTree v4.27 ---
