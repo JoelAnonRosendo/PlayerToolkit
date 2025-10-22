@@ -13,6 +13,9 @@ import threading
 import webbrowser
 from queue import Queue
 from collections import defaultdict
+# NUEVO: Importación para la función de actualización y expresiones regulares
+import requests
+import re
 
 # Importaciones relativas
 from .config import *
@@ -24,6 +27,11 @@ try:
     DND_SUPPORT = True
 except ImportError:
     DND_SUPPORT = False
+
+# MODIFICADO: Constantes actualizadas con tu información
+APP_VERSION = "Versión 6.1.5"
+GITHUB_OWNER = "JoelAnonRosendo"
+GITHUB_REPO = "PlayerToolkit"
 
 
 class ScrollableFrame(ttk.Frame):
@@ -82,7 +90,7 @@ class NewAppConfigDialog(simpledialog.Dialog):
 
     def body(self, master):
         master.columnconfigure(1, weight=1)
-
+        
         fields = {
             "Icono:": ("icon", self.config['icon']),
             "Categoría:": ("categoria", self.config['categoria']),
@@ -91,7 +99,7 @@ class NewAppConfigDialog(simpledialog.Dialog):
             "Clave de Desinstalación:": ("uninstall_key", self.config['uninstall_key'] or ""),
             "URL de Descarga:": ("url", self.config['url'] or ""),
         }
-
+        
         self.entries = {}
         row = 0
         first_widget = None  # Almacenará el primer widget para darle el foco
@@ -117,9 +125,9 @@ class NewAppConfigDialog(simpledialog.Dialog):
 
             if first_widget is None:
                 first_widget = current_widget # Guarda el primer widget creado
-
+            
             row += 1
-
+        
         return first_widget # Devuelve el widget para el foco, no la variable
 
     def apply(self):
@@ -132,7 +140,7 @@ class NewAppConfigDialog(simpledialog.Dialog):
             self.result['args_instalacion'] = json.loads(args_str.replace("'", '"')) if args_str else []
             self.result['uninstall_key'] = self.entries['uninstall_key'].get() or None
             self.result['url'] = self.entries['url'].get() or None
-
+            
             # Copiar otros valores que no están en el formulario pero podrían haber sido adivinados
             for key in ['script_path']:
                 if key in self.config:
@@ -142,7 +150,7 @@ class NewAppConfigDialog(simpledialog.Dialog):
             messagebox.showerror("Error de Formato", f"El valor para 'Argumentos' no es una lista JSON válida.\nEjemplo: [\"/S\", \"/NORESTART\"]\n\nError: {e}", parent=self)
             self.result = None
 
-
+        
 class GroupEditorDialog(simpledialog.Dialog):
     def __init__(self, parent, title, app_configs, group_name=None, group_apps=None):
         self.app_configs = app_configs
@@ -156,7 +164,7 @@ class GroupEditorDialog(simpledialog.Dialog):
         self.name_entry = ttk.Entry(master, width=40)
         if self.group_name: self.name_entry.insert(0, self.group_name)
         self.name_entry.grid(row=0, column=1, padx=5, pady=5)
-
+        
         scroll_frame = ScrollableFrame(master)
         scroll_frame.grid(row=1, columnspan=2, sticky='nsew', padx=5, pady=5)
         master.grid_rowconfigure(1, weight=1)
@@ -180,7 +188,7 @@ class GroupEditorDialog(simpledialog.Dialog):
 def open_group_manager(parent, callback_on_close, app_configs):
     win = tk.Toplevel(parent)
     win.title("Gestionar Grupos"); win.transient(parent); win.grab_set(); win.geometry("400x450")
-
+    
     base_path = Path(sys.executable).parent if getattr(sys, 'frozen', False) else Path(sys.argv[0]).parent
     grupos_dir = base_path / "Programas" / "Grupos"
 
@@ -203,7 +211,7 @@ def open_group_manager(parent, callback_on_close, app_configs):
             filepath = grupos_dir / f"{name}.txt"
             if filepath.exists(): filepath.unlink(); return True
         except IOError as e: messagebox.showerror("Error al Eliminar", f"No se pudo eliminar el grupo '{name}':\n{e}", parent=win); return False
-
+            
     def populate_listbox():
         listbox.delete(0, tk.END)
         for name in sorted(groups.keys()): listbox.insert(tk.END, name)
@@ -233,7 +241,7 @@ def open_group_manager(parent, callback_on_close, app_configs):
         name = listbox.get(selected_idx[0])
         if messagebox.askyesno("Confirmar", f"¿Estás seguro de que quieres eliminar el grupo '{name}'?", parent=win):
             if delete_group_file(name): del groups[name]; populate_listbox()
-
+    
     list_frame = ttk.Frame(win, padding=10); list_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
     listbox = tk.Listbox(list_frame, selectmode=tk.SINGLE, exportselection=False); listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
     scrollbar = ttk.Scrollbar(list_frame, orient=tk.VERTICAL, command=listbox.yview); scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
@@ -253,15 +261,15 @@ class PlayerToolkitApp:
         self.installed_software = installed_software
         self.app_tree = None
         self.extra_options = {}
-        self.config_treeview = None
+        self.config_treeview = None 
         self.modified_configs = set()
         self.uninstall_vars = {}
         self.log_queue = Queue()
         self.tree_editor = None # Para el editor de celdas en el Treeview
-
+        
         self.CHECK_CHAR = "☑"
         self.UNCHECK_CHAR = "☐"
-
+        
         if getattr(sys, 'frozen', False):
             self.user_data_dir = Path(sys.executable).parent
         else:
@@ -288,32 +296,33 @@ class PlayerToolkitApp:
         style.configure("Category.Treeview", font=("Segoe UI", 10, "bold"))
 
     def _setup_ui(self):
-        self.root.title("PlayerToolkit v6.1.3")
+        # MODIFICADO: Usar la constante de versión para el título
+        self.root.title(f"PlayerToolkit {APP_VERSION}")
         self.root.geometry("850x650")
         self.root.minsize(700, 500)
         main_frame = ttk.Frame(self.root, padding="10")
         main_frame.pack(expand=True, fill=tk.BOTH)
         main_frame.rowconfigure(1, weight=1)
         main_frame.columnconfigure(0, weight=1)
-
+        
         top_frame = ttk.Frame(main_frame)
         top_frame.grid(row=0, column=0, sticky="ew", pady=(0, 5))
         ttk.Label(top_frame, text="PlayerToolkit", font=("Segoe UI", 16, "bold")).pack(side="left")
         ttk.Button(top_frame, text="🌙/☀️", command=sv_ttk.toggle_theme).pack(side="right")
-
+        
         self.notebook = ttk.Notebook(main_frame)
         self.notebook.grid(row=1, column=0, sticky="nsew", pady=5)
-
+        
         self.app_tab_frame = self._create_app_tab()
         self.groups_tab_frame = self._create_groups_tab()
         self.uninstall_tab_frame = self._create_uninstall_tab()
         self.log_tab_frame = self._create_log_tab()
         self.config_tab_frame = self._create_config_tab()
-
+        
         self.bottom_frame = ttk.Frame(main_frame)
         self.bottom_frame.grid(row=2, column=0, sticky="ew", pady=(10, 0))
         self.continue_button = ttk.Button(self.bottom_frame, text="Ejecutar Tareas ➔", style='Accent.TButton', command=self._on_siguiente_click)
-
+        
         self.notebook.bind("<<NotebookTabChanged>>", self._on_tab_changed)
         self._on_tab_changed()
 
@@ -329,14 +338,14 @@ class PlayerToolkitApp:
             self.continue_button.pack_forget()
         else:
             self.continue_button.pack(side=tk.RIGHT)
-
+            
     def _create_app_tab(self):
         app_tab = ttk.Frame(self.notebook, padding="10")
         self.notebook.add(app_tab, text='Aplicaciones 📦')
-
+        
         controls_frame = ttk.Frame(app_tab)
         controls_frame.pack(fill='x', pady=(0, 10))
-
+        
         ttk.Button(controls_frame, text="Refrescar 🔄", command=self._rescan_and_refresh_ui).pack(side="left", padx=(0, 10))
         self.search_var = tk.StringVar()
         ttk.Label(controls_frame, text="🔍 Buscar:").pack(side=tk.LEFT, padx=(0, 5))
@@ -346,7 +355,7 @@ class PlayerToolkitApp:
 
         tree_frame = ttk.Frame(app_tab)
         tree_frame.pack(fill='both', expand=True)
-
+        
         self.app_tree = ttk.Treeview(tree_frame, columns=('status', 'selector'), show='tree headings')
         self.app_tree.heading('#0', text='Aplicación')
         self.app_tree.heading('status', text='Estado')
@@ -354,30 +363,30 @@ class PlayerToolkitApp:
         self.app_tree.column('#0', width=300, stretch=tk.YES)
         self.app_tree.column('status', width=150, anchor='w')
         self.app_tree.column('selector', width=200, stretch=tk.YES, anchor='w')
-
+        
         self.app_tree.tag_configure('disabled', foreground='gray')
         self.app_tree.tag_configure('installed', foreground='green')
         self.app_tree.tag_configure('category', font=("Segoe UI", 10, "bold"))
 
         self.app_tree.bind('<Button-1>', self._on_tree_click)
-
+        
         scrollbar = ttk.Scrollbar(tree_frame, orient="vertical", command=self.app_tree.yview)
         self.app_tree.configure(yscrollcommand=scrollbar.set)
-
+        
         self.app_tree.pack(side=tk.LEFT, fill='both', expand=True)
         scrollbar.pack(side=tk.RIGHT, fill='y')
 
         self._populate_app_tree()
         return app_tab
-
+        
     def _create_log_tab(self):
         log_tab = ttk.Frame(self.notebook, padding="10")
         self.notebook.add(log_tab, text='Log de Actividad 📜')
-
+        
         self.log_text = tk.Text(log_tab, wrap="word", font=("Consolas", 9), relief="flat", padx=5, pady=5, state="disabled")
         scrollbar = ttk.Scrollbar(log_tab, command=self.log_text.yview)
         self.log_text.config(yscrollcommand=scrollbar.set)
-
+        
         scrollbar.pack(side=tk.RIGHT, fill='y')
         self.log_text.pack(side=tk.LEFT, fill='both', expand=True)
         return log_tab
@@ -385,25 +394,25 @@ class PlayerToolkitApp:
     def _populate_app_tree(self):
         for item in self.app_tree.get_children():
             self.app_tree.delete(item)
-
+        
         categorized_apps = defaultdict(list)
         for name, config in self.app_configs.items():
             categorized_apps[config.get('categoria', 'Sin Categoría')].append(name)
-
+        
         self.extra_options.clear()
 
         for category in sorted(categorized_apps.keys()):
             cat_id = self.app_tree.insert('', 'end', text=f"{self.UNCHECK_CHAR} {category}", open=True, tags=('category',))
-
+            
             for app_key in sorted(categorized_apps[category]):
                 config = self.app_configs[app_key]
                 icon = config.get('icon', '📦')
                 app_id = self.app_tree.insert(cat_id, 'end', iid=app_key, text=f"{self.UNCHECK_CHAR} {icon} {app_key}")
-
+                
                 scan_result = self.scan_results.get(app_key, [])
                 task_type = config.get('tipo')
                 status_msg = ""
-
+                
                 if task_type in [TASK_TYPE_LOCAL_INSTALL, TASK_TYPE_MANUAL_ASSISTED]:
                     if not scan_result or scan_result == [STATUS_FOLDER_NOT_FOUND]:
                         if config.get("url"): status_msg = "(Se descargará)"
@@ -423,15 +432,15 @@ class PlayerToolkitApp:
 
     def _check_installed_status(self):
         installed_names_lower = {name.lower() for name in self.installed_software.keys()}
-
+        
         for app_key, config in self.app_configs.items():
             if not self.app_tree.exists(app_key): continue
-
+            
             uninstall_key = config.get("uninstall_key")
             if not uninstall_key: continue
-
+            
             is_installed = any(uninstall_key.lower() in name for name in installed_names_lower)
-
+            
             if is_installed:
                 self.app_tree.set(app_key, 'status', "✔️ Instalado")
                 self.app_tree.item(app_key, tags=('disabled', 'installed'))
@@ -452,14 +461,14 @@ class PlayerToolkitApp:
         contents_list.grid(row=1, column=0, sticky='nsew')
         buttons_frame = ttk.Frame(main_frame)
         buttons_frame.grid(row=2, column=0, sticky='ew', pady=(10, 0))
-
+        
         def refresh_group_combo():
             groups = self._load_groups()
             group_names = sorted(groups.keys())
             group_combo['values'] = group_names
             group_combo.set('')
             contents_list.delete(0, tk.END)
-
+        
         def on_group_select(event):
             contents_list.delete(0, tk.END)
             selected = group_combo.get()
@@ -468,23 +477,23 @@ class PlayerToolkitApp:
             apps_in_group = groups.get(selected, [])
             for app_name in sorted(apps_in_group):
                 contents_list.insert(tk.END, app_name)
-
+        
         def apply_group():
             selected_group = group_combo.get()
             if not selected_group:
                 messagebox.showwarning("Sin selección", "Por favor, selecciona un grupo.", parent=self.root)
                 return
-
+            
             groups = self._load_groups()
             apps_in_group = set(groups.get(selected_group, []))
-
+            
             for category_id in self.app_tree.get_children():
                 for app_id in self.app_tree.get_children(category_id):
                     if 'disabled' not in self.app_tree.item(app_id, 'tags'):
                         is_in_group = app_id in apps_in_group
                         self._set_item_checked(app_id, is_in_group)
                 self._update_parent_check_state(category_id)
-
+            
             messagebox.showinfo("Grupo Aplicado", f"Grupo '{selected_group}' cargado.", parent=self.root)
             self.notebook.select(0)
 
@@ -493,7 +502,7 @@ class PlayerToolkitApp:
         ttk.Button(buttons_frame, text="Gestionar Grupos...", command=lambda: open_group_manager(self.root, refresh_group_combo, self.app_configs)).pack(side=tk.LEFT, expand=True, fill='x', padx=(5,0))
         refresh_group_combo()
         return groups_tab
-
+    
     def _create_uninstall_tab(self):
         uninstall_tab = ttk.Frame(self.notebook, padding="10")
         self.notebook.add(uninstall_tab, text='Desinstalar 🗑️')
@@ -518,7 +527,7 @@ class PlayerToolkitApp:
         for widget in self.uninstall_frame.winfo_children():
             widget.destroy()
         self.uninstall_vars.clear()
-
+        
         for name, data in sorted(self.installed_software.items(), key=lambda item: item[0].lower()):
             var = tk.BooleanVar()
             version_info = f" (v{data.get('version')})" if data.get('version') else ""
@@ -549,20 +558,20 @@ class PlayerToolkitApp:
         self._populate_config_treeview()
         self.config_treeview.bind("<Button-1>", self._on_config_tree_click)
         self.config_treeview.bind("<Double-1>", self._on_tree_double_click)
-
+        
         buttons_frame = ttk.Frame(config_tab, padding=(0, 10, 0, 0))
         buttons_frame.pack(fill='x', side='bottom')
-
+        
         ttk.Button(buttons_frame, text="❔ Ayuda", command=self._show_config_help).pack(side='left')
         ttk.Button(buttons_frame, text="Acerca de...", command=self._show_about_dialog).pack(side='left', padx=5)
-
+        
         ttk.Button(buttons_frame, text="Exportar", command=self._export_config).pack(side='right')
         ttk.Button(buttons_frame, text="Importar", command=self._import_config).pack(side='right', padx=5)
-
+        
         ttk.Button(buttons_frame, text="Guardar Cambios", command=self._save_custom_config).pack(side='right', padx=5)
         ttk.Button(buttons_frame, text="Restaurar Predeterminados", command=self._restore_default_config).pack(side='right')
         return config_tab
-
+    
     def _rescan_and_refresh_ui(self, silent=False):
         loading_window = None
         if not silent:
@@ -603,12 +612,12 @@ class PlayerToolkitApp:
         self._populate_app_tree()
         self._check_installed_status()
         self._populate_uninstall_tab()
-
+        
         if not silent:
             if loading_window:
                 loading_window.destroy()
             messagebox.showinfo("Actualizado", "Las listas de aplicaciones han sido actualizadas.", parent=self.root)
-
+        
     def _show_config_help(self):
         help_title = "Ayuda sobre la Configuración"
         help_text = (
@@ -629,26 +638,84 @@ class PlayerToolkitApp:
             "Consejo: Busca en Google \"<programa> silent install\" para encontrar los correctos.\n"
         )
         messagebox.showinfo(help_title, help_text, parent=self.root)
-
+    
     def _show_about_dialog(self):
         about_window = tk.Toplevel(self.root)
         about_window.title("Acerca de PlayerToolkit")
-        about_window.geometry("400x300")
+        about_window.geometry("400x320")
         about_window.transient(self.root)
         about_window.resizable(False, False)
         about_window.grab_set()
-
+        
         ttk.Label(about_window, text="PlayerToolkit", font=("Segoe UI", 16, "bold")).pack(pady=(20, 5))
-        ttk.Label(about_window, text="Versión 6.1.3").pack()
-
-        ttk.Label(about_window, text="Desarrollado por [Tu Nombre/Alias Aquí]").pack(pady=20)
-
-        link = ttk.Label(about_window, text="Visita el Proyecto en GitHub", foreground="blue", cursor="hand2")
+        ttk.Label(about_window, text=f"{APP_VERSION}").pack()
+        
+        ttk.Label(about_window, text="Una herramienta para simplificar instalaciones.").pack(pady=20)
+        
+        repo_url = f"https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}"
+        link = ttk.Label(about_window, text="Visita el Proyecto en GitHub", foreground="cyan", cursor="hand2")
         link.pack()
-        link.bind("<Button-1>", lambda e: webbrowser.open_new("https://github.com/tu-usuario/PlayerToolkit"))
+        link.bind("<Button-1>", lambda e: webbrowser.open_new(repo_url))
+        
+        ttk.Button(about_window, text="Buscar Actualizaciones", command=self._on_check_updates_click).pack(pady=(20, 5))
 
         ttk.Button(about_window, text="Cerrar", command=about_window.destroy).pack(side="bottom", pady=20)
 
+    def _on_check_updates_click(self):
+        # Usamos la ventana principal como padre para el messagebox inicial
+        messagebox.showinfo("Buscando Actualizaciones", "Se está contactando con GitHub para buscar nuevas versiones...", parent=self.root)
+        threading.Thread(target=self._check_for_updates, daemon=True).start()
+
+    # NUEVO: Función para parsear versiones como "Versión 6.1.5" a tuplas (6, 1, 5)
+    def _parse_version_string(self, version_string):
+        """Extrae números de versión de una cadena como 'Versión 6.1.5' o 'v6.1.5'."""
+        if not isinstance(version_string, str):
+            return (0, 0, 0)
+            
+        match = re.search(r'(\d+)\.(\d+)\.(\d+)', version_string)
+        if match:
+            return tuple(map(int, match.groups()))
+        return (0, 0, 0)
+
+    def _check_for_updates(self):
+        api_url = f"https://api.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}/releases/latest"
+        try:
+            response = requests.get(api_url, timeout=10)
+            response.raise_for_status()
+            latest_release = response.json()
+            latest_version_tag = latest_release.get("tag_name")
+            
+            if not latest_version_tag:
+                self.root.after(0, self._show_update_error, "No se pudo encontrar la etiqueta de versión en la última release.")
+                return
+
+            # MODIFICADO: Usar la nueva función de parseo para una comparación robusta
+            current_version_tuple = self._parse_version_string(APP_VERSION)
+            latest_version_tuple = self._parse_version_string(latest_version_tag)
+
+            if latest_version_tuple > current_version_tuple:
+                self.root.after(0, self._show_update_available, latest_version_tag, latest_release.get("html_url"))
+            else:
+                self.root.after(0, self._show_no_update)
+
+        except requests.RequestException as e:
+            self.root.after(0, self._show_update_error, f"Error de red o API: {e}")
+        except Exception as e:
+            self.root.after(0, self._show_update_error, f"Error inesperado: {e}")
+
+    def _show_update_available(self, new_version, download_url):
+        msg = f"¡Hay una nueva versión disponible: {new_version}!\n\n" \
+              f"Tu versión actual es: {APP_VERSION}.\n\n" \
+              "¿Quieres abrir la página de descargas ahora?"
+        if messagebox.askyesno("Actualización Disponible", msg, parent=self.root):
+            webbrowser.open_new(download_url)
+
+    def _show_no_update(self):
+        messagebox.showinfo("Actualizado", "¡Ya tienes la última versión de PlayerToolkit!", parent=self.root)
+
+    def _show_update_error(self, error_message):
+        messagebox.showerror("Error de Actualización", f"No se pudo comprobar si hay actualizaciones.\n\nError: {error_message}", parent=self.root)
+        
     def _populate_config_treeview(self):
         for item in self.config_treeview.get_children(): self.config_treeview.delete(item)
         for app_name, config in sorted(self.app_configs.items()):
@@ -666,17 +733,16 @@ class PlayerToolkitApp:
         column_id_str = self.config_treeview.identify_column(event.x)
         column_name = self.config_treeview.heading(column_id_str, "text")
 
-        # El doble clic es ahora solo para 'Icono' y 'Argumentos' (edición manual)
         if column_name not in ["Icono", "Argumentos"]:
             return
 
         key_to_edit = {'Icono': 'icon', 'Argumentos': 'args_instalacion'}[column_name]
         app_name = item_id
         current_value = self.app_configs[app_name].get(key_to_edit)
-
+        
         prompt = f"Nuevo valor para '{key_to_edit}' en '{app_name}':"
         new_value_str = simpledialog.askstring(f"Editar {key_to_edit}", prompt, initialvalue=str(current_value), parent=self.root)
-
+        
         if new_value_str is None: return
         try:
             new_value = new_value_str
@@ -693,18 +759,18 @@ class PlayerToolkitApp:
         if self.tree_editor:
             self.tree_editor.destroy()
             self.tree_editor = None
-
+            
         item_id = self.config_treeview.identify_row(event.y)
         column_id_str = self.config_treeview.identify_column(event.x)
-
+        
         if not item_id or not column_id_str:
             return
 
         x, y, width, height = self.config_treeview.bbox(item_id, column_id_str)
         column_name = self.config_treeview.heading(column_id_str, "text")
-
+        
         value = self.config_treeview.set(item_id, column_id_str)
-
+        
         editor = None
         options = []
 
@@ -716,7 +782,7 @@ class PlayerToolkitApp:
             ]
             editor = ttk.Combobox(self.config_treeview, values=options, state="readonly")
             editor.set(value)
-
+        
         elif column_name == "Categoría":
             categories = sorted(list(set(cfg.get('categoria', 'Sin Categoría') for cfg in self.app_configs.values())))
             editor = ttk.Combobox(self.config_treeview, values=categories, state="normal")
@@ -730,16 +796,15 @@ class PlayerToolkitApp:
                 "Preset: Vacío": '[]'
             }
             editor = ttk.Combobox(self.config_treeview, values=list(self.args_presets.keys()), state="readonly")
-
+        
         if editor:
             self.tree_editor = editor
             editor.place(x=x, y=y, width=width, height=height)
             editor.focus_set()
-
+            
             def on_commit(event):
                 new_value = editor.get()
-
-                # Manejar presets de argumentos
+                
                 if column_name == "Argumentos" and new_value in self.args_presets:
                     new_value = self.args_presets[new_value]
 
@@ -749,14 +814,14 @@ class PlayerToolkitApp:
 
                 if key_to_edit:
                     self.config_treeview.set(item_id, column_name, new_value)
-
+                    
                     try:
                         final_value = json.loads(new_value.replace("'", '"')) if key_to_edit == "args_instalacion" else new_value
                         self.app_configs[app_name][key_to_edit] = final_value
                         self.modified_configs.add(app_name)
                     except (json.JSONDecodeError, ValueError) as e:
                          messagebox.showerror("Error de Formato", f"Valor no válido para argumentos: {e}", parent=self.root)
-
+                
                 editor.destroy()
                 self.tree_editor = None
 
@@ -766,11 +831,11 @@ class PlayerToolkitApp:
     def _save_custom_config(self):
         self.conf_dir.mkdir(exist_ok=True)
         config_file = self.conf_dir / "config_personalizada.json"
-
+        
         if not self.modified_configs:
             messagebox.showinfo("Sin cambios", "No se han realizado cambios para guardar.", parent=self.root)
             return
-
+        
         current_custom_config = {}
         if config_file.exists():
             with open(config_file, 'r', encoding='utf-8') as f:
@@ -780,12 +845,12 @@ class PlayerToolkitApp:
             default_app_conf = DEFAULT_APP_CONFIG.copy()
             if app_name in APP_CONFIGURATIONS:
                 default_app_conf.update(APP_CONFIGURATIONS[app_name])
-
+            
             app_changes = {}
             for key, value in self.app_configs[app_name].items():
                 if key not in default_app_conf or default_app_conf[key] != value:
                     app_changes[key] = value
-
+            
             if app_changes:
                 current_custom_config[app_name] = app_changes
 
@@ -838,7 +903,7 @@ class PlayerToolkitApp:
         except IOError as e:
             messagebox.showerror("Error de Lectura", f"No se pudieron cargar los grupos:\n{e}")
         return groups
-
+        
     def _on_siguiente_click(self):
         selected_apps = []
         for cat_id in self.app_tree.get_children():
@@ -852,11 +917,11 @@ class PlayerToolkitApp:
 
         current_extra_options = {}
         resumen = "Se realizarán las siguientes acciones:\n\n"
-
+        
         for key in selected_apps:
             config = self.app_configs[key]
             resumen_line = f"- {config['icon']} {key}"
-
+            
             task_type = config.get("tipo")
             if task_type in [TASK_TYPE_LOCAL_INSTALL, TASK_TYPE_MANUAL_ASSISTED]:
                 instaladores = self.scan_results.get(key, [])
@@ -898,7 +963,7 @@ class PlayerToolkitApp:
         if not selected_to_uninstall:
             messagebox.showwarning("Sin Selección", "No has seleccionado ningún programa para desinstalar.")
             return
-
+        
         resumen = "Se intentará desinstalar silenciosamente:\n\n"
         for name in selected_to_uninstall:
             resumen += f"- {name}\n"
@@ -934,7 +999,7 @@ class PlayerToolkitApp:
         if not enabled_children:
             self._set_item_checked(parent_id, False)
             return
-
+            
         all_checked = all(self.app_tree.item(cid, 'text').startswith(self.CHECK_CHAR) for cid in enabled_children)
         self._set_item_checked(parent_id, all_checked)
 
@@ -942,17 +1007,16 @@ class PlayerToolkitApp:
         item_id = self.app_tree.identify_row(event.y)
         column_id_str = self.app_tree.identify_column(event.x)
         region = self.app_tree.identify_region(event.x, event.y)
-
+        
         if not item_id: return
         if 'disabled' in self.app_tree.item(item_id, 'tags'): return
 
-        # *** CAMBIO PRINCIPAL AQUÍ ***
         column_name = self.app_tree.heading(column_id_str, "text")
 
         if column_name == "Versión / Archivo" and self.app_tree.parent(item_id):
             scan_result = self.scan_results.get(item_id, [])
             if scan_result and len(scan_result) > 1:
-                dialog = ComboboxDialog(self.root, f"Seleccionar para {item_id}",
+                dialog = ComboboxDialog(self.root, f"Seleccionar para {item_id}", 
                                         "Elige una versión o archivo:", scan_result,
                                         initialvalue=self.extra_options.get(item_id, {}).get('selected'))
                 if dialog.result:
@@ -976,7 +1040,7 @@ class PlayerToolkitApp:
 
     def _filter_app_tree(self):
         query = self.search_var.get().lower().strip()
-
+        
         for cat_id in list(self.app_tree.get_children()):
             self.app_tree.reattach(cat_id, '', 'end')
             for app_id in list(self.app_tree.get_children(cat_id)):
@@ -986,7 +1050,7 @@ class PlayerToolkitApp:
 
         for cat_id in list(self.app_tree.get_children()):
             cat_text = self.app_tree.item(cat_id, 'text').lower()
-
+            
             if query not in cat_text:
                 any_child_visible = False
                 for app_id in list(self.app_tree.get_children(cat_id)):
@@ -995,10 +1059,10 @@ class PlayerToolkitApp:
                         any_child_visible = True
                     else:
                         self.app_tree.detach(app_id)
-
+                
                 if not any_child_visible:
                     self.app_tree.detach(cat_id)
-
+    
     def _process_log_queue(self):
         try:
             while not self.log_queue.empty():
@@ -1014,7 +1078,7 @@ class PlayerToolkitApp:
         filepath = event.data
         if filepath.startswith('{') and filepath.endswith('}'):
             filepath = filepath[1:-1]
-
+        
         if filepath.lower().endswith("config_personalizada.json"):
             if messagebox.askyesno("Importar Configuración", f"¿Deseas importar el archivo de configuración?\n\n{filepath}\n\nLa aplicación deberá reiniciarse."):
                 self._import_config(src_path=filepath)
