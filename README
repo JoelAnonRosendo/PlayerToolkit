@@ -5,9 +5,6 @@ python.exe -m pip install --upgrade pip
 pip install requests sv-ttk pyinstaller
 pip install tkinterdnd2-universal
 
-Carpeta Programas se descarga desde este enlace:
-https://drive.google.com/drive/folders/1gDeZkBWNOZyp2-vuN-9cVrumdCZ7zjyK?usp=sharing
-
 
 Si se quiere cambiar nombres o agregar servicios al .py
 
@@ -22,3 +19,17 @@ Una vez editado el documento .py realizaremos estas acciones
 5._ Y por ultimo el exe se generara en la carpeta dist que esta en D:\dist, copias el exe y lo pones en D:\.
     ¡La carpeta dist esta oculta!
 6._ Ya se puede ejecutar el exe.
+
+
+
+____________________________________________________________________________________________________________
+
+====================== MIRAR ======================
+pyinstaller --name "PlayerToolkit_v1.6.6" --windowed --add-data "toolkit_lib:toolkit_lib" player_toolkit_v6.1.6.py
+
+Modificar rutas para que funcione correctamente
+
+===================================================
+
+pyinstaller --name "PlayerToolkit_v6.1.6" --onefile --add-data "toolkit_lib:toolkit_lib" --icon="ruta/a/tu/icono.ico" --windowed player_toolkit_v6.1.6.py
+pyinstaller --name "PlayerToolkit" --onefile --windowed --icon="ruta/a/tu/icono.ico" player_toolkit_v6.1.6.py

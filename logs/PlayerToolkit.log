@@ -164,3 +164,54 @@
 2025-10-21 13:53:43,591 - INFO - --- Iniciando PlayerToolkit Versión 6.1.5 ---
 2025-10-21 14:00:03,172 - INFO - --- Iniciando PlayerToolkit Versión 6.1.5 ---
 2025-10-21 14:00:16,030 - INFO - --- Iniciando PlayerToolkit Versión 6.1.5 ---
+2025-10-22 12:03:38,295 - INFO - --- Iniciando PlayerToolkit Versión 6.1.6 ---
+2025-10-22 12:06:37,483 - INFO - --- Iniciando PlayerToolkit Versión 6.1.6 ---
+2025-10-22 12:14:22,903 - INFO - --- Iniciando PlayerToolkit Versión 6.1.6 ---
+2025-10-22 12:21:47,320 - INFO - --- Iniciando PlayerToolkit Versión 6.1.6 ---
+2025-10-22 12:21:47,730 - INFO - Caché no encontrado o inválido. Realizando escaneo completo.
+2025-10-22 12:27:37,088 - INFO - Ejecutando lote de 1 tarea(s) en paralelo: LimpiarArchivosTemporales
+2025-10-22 12:27:37,165 - INFO - --- Iniciando tarea: LimpiarArchivosTemporales ---
+2025-10-22 12:27:37,165 - INFO - Iniciando limpieza de archivos temporales.
+2025-10-22 12:27:37,165 - INFO - Limpiando carpeta: C:\Users\ITDF15~1.LIG\AppData\Local\Temp
+2025-10-22 12:27:39,107 - INFO - Limpiando carpeta: C:\Users\ITDF15~1.LIG\AppData\Local\Temp
+2025-10-22 12:27:39,107 - INFO - Limpiando carpeta: C:\Windows\Temp
+2025-10-22 12:27:39,117 - INFO - No se pudo eliminar 'C:\Windows\Temp\atafdefor.dat': [WinError 5] Acceso denegado: 'C:\\Windows\\Temp\\atafdefor.dat'
+2025-10-22 12:27:39,117 - INFO - No se pudo eliminar 'C:\Windows\Temp\czulljxcg228.dat': [WinError 5] Acceso denegado: 'C:\\Windows\\Temp\\czulljxcg228.dat'
+2025-10-22 12:27:39,132 - INFO - No se pudo eliminar 'C:\Windows\Temp\fztblci.tmp': [WinError 5] Acceso denegado: 'C:\\Windows\\Temp\\fztblci.tmp'
+2025-10-22 12:27:39,132 - INFO - No se pudo eliminar 'C:\Windows\Temp\gjbbnyseg.log': [WinError 5] Acceso denegado: 'C:\\Windows\\Temp\\gjbbnyseg.log'
+2025-10-22 12:27:39,134 - INFO - No se pudo eliminar 'C:\Windows\Temp\iudvvvfae.dat': [WinError 5] Acceso denegado: 'C:\\Windows\\Temp\\iudvvvfae.dat'
+2025-10-22 12:27:39,254 - INFO - No se pudo eliminar 'C:\Windows\Temp\LS-WS108-20251022-0825.log': [WinError 32] El proceso no tiene acceso al archivo porque está siendo utilizado por otro proceso: 'C:\\Windows\\Temp\\LS-WS108-20251022-0825.log'
+2025-10-22 12:27:39,254 - INFO - No se pudo eliminar 'C:\Windows\Temp\mhtkvovtj.data': [WinError 5] Acceso denegado: 'C:\\Windows\\Temp\\mhtkvovtj.data'
+2025-10-22 12:27:39,266 - INFO - No se pudo eliminar 'C:\Windows\Temp\migppremb82.data': [WinError 5] Acceso denegado: 'C:\\Windows\\Temp\\migppremb82.data'
+2025-10-22 12:27:39,268 - INFO - No se pudo eliminar 'C:\Windows\Temp\mtrgbzief4.data': [WinError 5] Acceso denegado: 'C:\\Windows\\Temp\\mtrgbzief4.data'
+2025-10-22 12:27:39,270 - INFO - No se pudo eliminar 'C:\Windows\Temp\vygplvc': [WinError 5] Acceso denegado: 'C:\\Windows\\Temp\\vygplvc'
+2025-10-22 12:27:39,286 - INFO - No se pudo eliminar 'C:\Windows\Temp\wkygtcvam46.log': [WinError 5] Acceso denegado: 'C:\\Windows\\Temp\\wkygtcvam46.log'
+2025-10-22 12:27:39,286 - INFO - Limpieza completada. 179 elementos eliminados (256.24 MB liberados).
+2025-10-22 12:27:39,286 - INFO - --- Tarea finalizada con ÉXITO: LimpiarArchivosTemporales ---
+2025-10-22 12:28:46,005 - INFO - --- PlayerToolkit cerrado ---
+2025-10-22 12:45:01,215 - INFO - --- Iniciando PlayerToolkit Versión 6.1.6 ---
+2025-10-22 12:45:13,722 - INFO - --- Iniciando PlayerToolkit Versión 6.1.6 ---
+2025-10-22 12:45:13,945 - INFO - Caché no encontrado o inválido. Realizando escaneo completo.
+2025-10-22 12:45:37,367 - INFO - --- PlayerToolkit cerrado ---
+2025-10-22 13:59:27,768 - INFO - --- Iniciando PlayerToolkit Versión 6.1.6 ---
+2025-10-22 13:59:38,044 - INFO - --- Iniciando PlayerToolkit Versión 6.1.6 ---
+2025-10-22 13:59:38,244 - INFO - Cargando datos desde caché.
+2025-10-22 14:00:10,160 - INFO - --- PlayerToolkit cerrado ---
+2025-10-22 15:01:33,360 - INFO - --- Iniciando PlayerToolkit Versión 6.1.6 ---
+2025-10-22 15:08:43,751 - INFO - --- Iniciando PlayerToolkit Versión 6.1.6 ---
+2025-10-22 15:08:54,460 - INFO - --- Iniciando PlayerToolkit Versión 6.1.6 ---
+2025-10-22 15:08:54,695 - INFO - Cargando datos desde caché.
+2025-10-22 15:17:15,913 - INFO - --- PlayerToolkit cerrado ---
+2025-10-22 15:22:03,392 - INFO - --- Iniciando PlayerToolkit Versión 6.1.6 ---
+2025-10-22 15:23:59,467 - INFO - --- Iniciando PlayerToolkit Versión 6.1.6 ---
+2025-10-22 15:24:14,641 - INFO - --- Iniciando PlayerToolkit Versión 6.1.6 ---
+2025-10-22 15:24:14,807 - INFO - Cargando datos desde caché.
+2025-10-22 15:37:59,898 - INFO - --- PlayerToolkit cerrado ---
+2025-10-22 15:38:15,429 - INFO - --- Iniciando PlayerToolkit Versión 6.1.6 ---
+2025-10-22 15:38:25,992 - INFO - --- Iniciando PlayerToolkit Versión 6.1.6 ---
+2025-10-22 15:38:26,174 - INFO - Cargando datos desde caché.
+2025-10-22 15:39:29,844 - INFO - --- PlayerToolkit cerrado ---
+2025-10-22 15:40:40,141 - INFO - --- Iniciando PlayerToolkit Versión 6.1.6 ---
+2025-10-22 15:40:58,010 - INFO - --- Iniciando PlayerToolkit Versión 6.1.6 ---
+2025-10-22 15:40:58,200 - INFO - Cargando datos desde caché.
+2025-10-22 15:44:02,062 - INFO - --- PlayerToolkit cerrado ---

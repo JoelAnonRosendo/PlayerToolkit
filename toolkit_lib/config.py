@@ -19,8 +19,8 @@ TASK_TYPE_CREATE_SCHEDULED_TASK = "crear_tarea_programada"
 
 
 # Extensiones y Estados
-INSTALLER_EXTENSIONS = ['.exe', '.msi', '.bat', '.jnlp']
-STATUS_FOLDER_NOT_FOUND = "CARPETA_NO_ENCONTRada"
+INSTALLER_EXTENSIONS = ['.exe', '.msi', '.bat', '.cmd', '.ps1'] # MODIFICADO: .cmd y .ps1 añadidos
+STATUS_FOLDER_NOT_FOUND = "CARPETA_NO_ENCONTRADA"
 STATUS_NO_FILES_FOUND = "NO_HAY_ARCHIVOS"
 
 DEFAULT_APP_CONFIG = {
@@ -29,8 +29,13 @@ DEFAULT_APP_CONFIG = {
     "mensaje_usuario": "Se abrirá el instalador. Completa la instalación y haz clic en 'Aceptar' para continuar.",
     "uninstall_key": None,
     "url": None,
-    "post_install_script": None,
-    # Nuevos campos para nuevas tareas
+    
+    # MODIFICADO: Campos unificados y nuevos
+    "pre_task_script": None,     # Script a ejecutar ANTES de la tarea principal
+    "post_task_script": None,    # Script a ejecutar DESPUÉS de la tarea principal
+    "dependencies": [],          # Lista de otras apps (claves) que deben instalarse antes
+
+    # Campos específicos para tareas
     "script_path": None,        # Para ejecutar_powershell
     "reg_path": None,           # Para modificar_registro (ej. HKEY_LOCAL_MACHINE\\...)
     "reg_key": None,            # Nombre de la clave de registro
@@ -53,7 +58,9 @@ APP_CONFIGURATIONS = {
     "PlataformaUniversal": {
         "args_instalacion": ["/VERYSILENT", "/SUPPRESSMSGBOXES"], "icon": "🎬",
         "uninstall_key": "Plataforma Universal", "categoria": "Multimedia",
-        "post_install_script": "copy_lsplayer_shortcut"
+        # MODIFICADO: Usando el nuevo sistema de dependencias y scripts
+        "dependencies": ["Java"],
+        "post_task_script": "copy_lsplayer_shortcut"
     },
     "LimpiarArchivosTemporales": {"tipo": TASK_TYPE_CLEAN_TEMP, "icon": "🧹", "categoria": "Utilidades del Sistema"},
     "TeamViewerHost": {"icon": "↔️", "tipo": TASK_TYPE_MANUAL_ASSISTED, "uninstall_key": "TeamViewer", "categoria": "Acceso Remoto"},
@@ -88,7 +95,6 @@ def guess_initial_config(app_path: Path) -> dict:
     config = DEFAULT_APP_CONFIG.copy()
     app_name = app_path.name
 
-    # Suposición 1: La clave de desinstalación es a menudo el nombre de la app.
     config['uninstall_key'] = app_name
 
     try:
@@ -97,7 +103,6 @@ def guess_initial_config(app_path: Path) -> dict:
 
         files = list(app_path.iterdir())
 
-        # Suposición 2: Buscar scripts de PowerShell.
         ps1_files = [f for f in files if f.suffix.lower() == '.ps1']
         if ps1_files:
             config['tipo'] = TASK_TYPE_RUN_POWERSHELL
@@ -105,22 +110,18 @@ def guess_initial_config(app_path: Path) -> dict:
             config['icon'] = '📜'
             return config
 
-        # Suposición 3: Buscar instaladores .msi (suelen tener args predecibles).
         msi_files = [f for f in files if f.suffix.lower() == '.msi']
         if msi_files:
             config['tipo'] = TASK_TYPE_LOCAL_INSTALL
-            config['args_instalacion'] = ['/qn'] # Argumento silencioso común para MSI
+            config['args_instalacion'] = ['/qn']
             return config
 
-        # Suposición 4: Buscar instaladores .exe.
         exe_files = [f for f in files if f.suffix.lower() == '.exe']
         if exe_files:
-            # Los args para .exe son muy variables, es más seguro dejarlo vacío.
             config['tipo'] = TASK_TYPE_LOCAL_INSTALL
             config['args_instalacion'] = []
             return config
 
-        # Suposición 5: Si no hay ejecutables, podría ser una tarea de copia.
         if files:
             config['tipo'] = TASK_TYPE_COPY_INTERACTIVE
             config['icon'] = '📂'
@@ -141,7 +142,7 @@ def build_app_configurations(programas_dir: Path, conf_dir: Path):
     newly_discovered_apps = []
 
     try:
-        discovered_apps_names = {d.name for d in programas_dir.iterdir() if d.is_dir() and d.name.lower() != "grupos"}
+        discovered_apps_names = {d.name for d in programas_dir.iterdir() if d.is_dir() and d.name.lower() not in ["grupos", "__pycache__"]}
     except FileNotFoundError:
         messagebox.showerror("Error Crítico", f"El directorio base '{programas_dir}' no fue encontrado.")
         return {}, []
@@ -153,7 +154,6 @@ def build_app_configurations(programas_dir: Path, conf_dir: Path):
         if app_name in APP_CONFIGURATIONS:
             config.update(APP_CONFIGURATIONS[app_name])
         else:
-            # Es una app nueva encontrada solo por su carpeta
             newly_discovered_apps.append(app_name)
         final_config[app_name] = config
     
@@ -166,11 +166,9 @@ def build_app_configurations(programas_dir: Path, conf_dir: Path):
                 if app_name in final_config:
                     final_config[app_name].update(custom_settings)
                 else:
-                    # App definida solo en config personalizada
                     config = DEFAULT_APP_CONFIG.copy()
                     config.update(custom_settings)
                     final_config[app_name] = config
-                # Si estaba en la lista de nuevas, la removemos porque ya tiene config personalizada
                 if app_name in newly_discovered_apps:
                     newly_discovered_apps.remove(app_name)
 
