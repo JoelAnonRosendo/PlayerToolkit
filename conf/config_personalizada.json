@@ -1,9 +1,0 @@
-{
-    "WizTree": {
-        "args_instalacion": [
-            "/S"
-        ],
-        "categoria": "Utilidades del Sistema",
-        "uninstall_key": "WizTree"
-    }
-}
